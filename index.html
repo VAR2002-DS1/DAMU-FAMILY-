@@ -11,10 +11,9 @@
       text-align: center;
       color: white;
 
-      /* FUN rainbow animated background */
       background: linear-gradient(270deg, red, orange, yellow, green, blue, purple);
       background-size: 1200% 1200%;
-      animation: rainbow 12s ease infinite;
+      animation: rainbow 10s ease infinite;
     }
 
     @keyframes rainbow {
@@ -25,41 +24,35 @@
 
     h1 {
       margin-top: 20px;
-      position: relative;
-      z-index: 2;
+    }
+
+    .container {
+      margin-top: 20px;
     }
 
     img {
-      width: 300px;
-      border-radius: 15px;
+      width: 500px;   /* BIGGER IMAGE */
+      max-width: 90%;
+      border-radius: 20px;
       margin-top: 20px;
-      position: relative;
-      z-index: 2;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
 
     input {
       margin-top: 10px;
-      position: relative;
-      z-index: 2;
     }
 
     button {
-      padding: 10px 20px;
-      margin: 10px;
+      padding: 12px 25px;
+      margin: 15px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
-      font-size: 16px;
-      position: relative;
-      z-index: 2;
-    }
-
-    #nextBtn {
-      background: #222;
+      font-size: 18px;
+      background: black;
       color: white;
     }
 
-    /* FLOATING BUBBLES */
     .bubble {
       position: absolute;
       bottom: -100px;
@@ -69,14 +62,8 @@
     }
 
     @keyframes floatUp {
-      0% {
-        transform: translateY(0);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-120vh);
-        opacity: 0;
-      }
+      0% {transform: translateY(0); opacity: 1;}
+      100% {transform: translateY(-120vh); opacity: 0;}
     }
   </style>
 </head>
@@ -85,14 +72,16 @@
 
   <h1>My Family Photos 📸</h1>
 
-  <input type="file" id="fileInput" multiple>
-  <br>
+  <div class="container">
+    <input type="file" id="fileInput" multiple>
+    <br>
 
-  <img id="photo" src="" alt="Upload a photo">
+    <img id="photo" src="" alt="Upload photos">
 
-  <br>
+    <br>
 
-  <button id="nextBtn">Next Photo ➡️</button>
+    <button id="nextBtn">Next Photo ➡️</button>
+  </div>
 
   <script>
     let images = [];
@@ -103,26 +92,32 @@
     const nextBtn = document.getElementById("nextBtn");
 
     fileInput.addEventListener("change", function() {
-      images = Array.from(fileInput.files);
+      images = Array.from(this.files);
       currentIndex = 0;
-      showImage();
-    });
 
-    function showImage() {
       if (images.length > 0) {
-        const file = images[currentIndex];
-        photo.src = URL.createObjectURL(file);
-      }
-    }
-
-    nextBtn.addEventListener("click", function() {
-      if (images.length > 0) {
-        currentIndex = (currentIndex + 1) % images.length;
         showImage();
       }
     });
 
-    /* CREATE FUN FLOATING BUBBLES */
+    function showImage() {
+      const file = images[currentIndex];
+      photo.src = URL.createObjectURL(file);
+    }
+
+    nextBtn.addEventListener("click", function() {
+      if (images.length === 0) return;
+
+      currentIndex++;
+
+      if (currentIndex >= images.length) {
+        currentIndex = 0; // loop back
+      }
+
+      showImage();
+    });
+
+    /* BUBBLES */
     for (let i = 0; i < 25; i++) {
       let bubble = document.createElement("div");
       bubble.classList.add("bubble");
